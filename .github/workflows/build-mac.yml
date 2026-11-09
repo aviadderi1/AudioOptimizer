@@ -3,7 +3,7 @@ name: Build macOS app
 on:
   push:
     branches: [main]
-    paths-ignore: ['docs/**', 'README.md']
+    paths-ignore: ['docs/*.html', 'docs/assets/**', 'README.md']
   workflow_dispatch:
 
 permissions:
@@ -25,10 +25,14 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: AD Audio Optimizer for Mac (latest build)
+          name: AD Audio Optimizer for Windows and Mac (latest build)
           body: |
-            Download **AD-Audio-Optimizer-mac.zip**, unzip, and move *AD Audio Optimizer* to Applications.
+            **Windows:** download **AD-Audio-Optimizer-windows.zip**, right-click → Extract All, then run *ADAudioOptimizer.exe*. If Windows says "Windows protected your PC", click More info → Run anyway.
+
+            **Mac:** download **AD-Audio-Optimizer-mac.zip**, unzip, and move *AD Audio Optimizer* to Applications.
             First launch: right-click the app → Open → Open (the app isn't notarized by Apple).
             Works on Apple Silicon (M1–M4) and Intel Macs, macOS 12 or newer.
-          files: build/AD-Audio-Optimizer-mac.zip
+          files: |
+            build/AD-Audio-Optimizer-mac.zip
+            docs/downloads/AD-Audio-Optimizer-windows.zip
           make_latest: true
