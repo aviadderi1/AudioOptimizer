@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AD Audio Optimizer · Your computer, tuned for sound</title>
+<meta name="description" content="Free one-click optimizer that prepares Windows and Mac for recording, mixing, live sound and video work. No dropouts, lower latency, everything reversible.">
+<meta property="og:title" content="AD Audio Optimizer · Your computer, tuned for sound">
+<meta property="og:description" content="One click prepares your Windows PC or Mac for recording, mixing, live shows and video editing.">
+<meta property="og:image" content="assets/icon.png">
+<meta name="theme-color" content="#0b0d11">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<style>
+:root{
+  --bg:#0b0d11;--bg2:#101318;--card:#14171d;--card2:#1b1f27;--line:#232832;--line2:#2f3542;
+  --text:#e8eaed;--sub:#9aa3b0;--muted:#6b7380;--accent:#3b82f6;--accent2:#7fb0ff;--good:#34d378;--warn:#f5aa28;--red:#e5484d;
+  --r:14px;--max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;gap:9px;padding:13px 20px;border-radius:10px;font-weight:600;font-size:15px;transition:transform .15s,background .15s,border-color .15s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn-p{background:var(--accent);color:#fff}
+.btn-p:hover{background:#2f74e6}
+.btn-s{background:var(--card2);border:1px solid var(--line2);color:var(--text)}
+.btn-s:hover{border-color:#46506a}
+.btn svg{width:18px;height:18px;flex:none}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--accent2);border:1px solid #23406e;background:#0f1a2c;padding:6px 13px;border-radius:30px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 0 3px rgba(52,211,120,.18)}
+h1{font-size:clamp(36px,5.4vw,62px);line-height:1.05;letter-spacing:-.025em;font-weight:700}
+h2{font-size:clamp(28px,3.6vw,42px);line-height:1.12;letter-spacing:-.02em;font-weight:700}
+h3{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.lead{color:var(--sub);font-size:clamp(16px,1.6vw,19px);max-width:600px}
+.sub{color:var(--sub)}
+.muted{color:var(--muted);font-size:14px}
+.grad{background:linear-gradient(90deg,#fff 0%,#9cc2ff 60%,#3b82f6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+section{padding:96px 0}
+.section-head{max-width:720px;margin:0 auto 52px;text-align:center}
+.section-head p{margin-top:14px}
+.kicker{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(11,13,17,.82);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:28px;height:66px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em}
+.brand img{width:32px;height:32px;border-radius:8px}
+nav .links{display:flex;gap:24px;font-size:14.5px;color:var(--sub)}
+nav .links a:hover{color:var(--text)}
+nav .btn{margin-left:auto;padding:9px 16px;font-size:14px}
+@media(max-width:860px){nav .links{display:none}}
+
+/* hero */
+.hero{padding:76px 0 64px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-200px -100px auto auto;width:720px;height:720px;background:radial-gradient(closest-side,rgba(59,130,246,.22),transparent);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative}
+.hero h1{margin:22px 0 20px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:30px 0 16px}
+.meta{display:flex;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:14px}
+.meta span{display:inline-flex;align-items:center;gap:7px}
+.meta svg{width:16px;height:16px;color:var(--good)}
+.gauge-wrap{display:flex;justify-content:center;position:relative}
+.gauge-wrap canvas{width:min(400px,80vw);height:min(400px,80vw);filter:drop-shadow(0 30px 60px rgba(0,0,0,.55))}
+.gauge-tag{position:absolute;bottom:-2%;left:50%;transform:translateX(-50%);font-size:12.5px;color:var(--sub);background:var(--card);border:1px solid var(--line2);padding:6px 12px;border-radius:20px;white-space:nowrap}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}.gauge-wrap{order:-1}}
+
+/* audience strip */
+.strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2)}
+.strip .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.aud{display:flex;align-items:center;gap:12px;padding:22px 18px;color:var(--sub);font-size:15px;border-left:1px solid var(--line)}
+.aud:first-child{border-left:0}
+.aud svg{width:24px;height:24px;color:var(--accent2);flex:none}
+.aud b{color:var(--text);font-weight:600;display:block;font-size:15px}
+@media(max-width:860px){.strip .wrap{grid-template-columns:1fr 1fr}.aud:nth-child(3){border-left:0}}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:26px 22px;text-align:center}
+.stat b{display:block;font-size:34px;letter-spacing:-.02em;font-weight:700;color:var(--good)}
+.stat span{color:var(--sub);font-size:14.5px}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.stat b{font-size:26px;white-space:nowrap}}
+
+/* problem */
+.problem{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px}
+.pcard h3{margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.pcard ul{list-style:none;display:grid;gap:11px}
+.pcard li{display:flex;gap:10px;color:var(--sub);font-size:15.5px}
+.pcard li svg{width:18px;height:18px;flex:none;margin-top:3px}
+.bad svg{color:var(--red)} .ok svg{color:var(--good)}
+.wavebox{margin-top:20px;height:70px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);overflow:hidden}
+.wavebox canvas{width:100%;height:100%;display:block}
+@media(max-width:860px){.problem{grid-template-columns:1fr}}
+
+/* features */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.f{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;transition:border-color .2s,transform .2s}
+.f:hover{border-color:var(--line2);transform:translateY(-2px)}
+.f .ic{width:44px;height:44px;border-radius:11px;background:#132037;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.f .ic svg{width:22px;height:22px;color:var(--accent2)}
+.f h3{margin-bottom:8px}
+.f p{color:var(--sub);font-size:15px}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:6px;background:#26201a;color:#f0b65a;margin-left:6px;vertical-align:2px}
+@media(max-width:960px){.features{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.features{grid-template-columns:1fr}}
+
+/* tweaks */
+.tweaks{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tw{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.tw h3{font-size:15.5px;margin-bottom:12px}
+.tw ul{list-style:none;display:grid;gap:8px}
+.tw li{font-size:14px;color:var(--sub);display:flex;gap:8px}
+.tw li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:9px;flex:none}
+@media(max-width:960px){.tweaks{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.tweaks{grid-template-columns:1fr}}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px;position:relative}
+.step .num{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.step h3{margin-bottom:8px}
+.step p{color:var(--sub);font-size:15px}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+
+/* live */
+.live{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+.live canvas{width:min(360px,78vw);height:min(360px,78vw);display:block;margin:0 auto}
+.live ul{list-style:none;display:grid;gap:14px;margin-top:24px}
+.live li{display:flex;gap:12px;color:var(--sub)}
+.live li b{color:var(--text);font-weight:600}
+.swatch{width:12px;height:12px;border-radius:4px;flex:none;margin-top:7px}
+@media(max-width:900px){.live{grid-template-columns:1fr}}
+
+/* compare */
+.table{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.row{display:grid;grid-template-columns:1.6fr 1fr 1fr;border-top:1px solid var(--line)}
+.row:first-child{border-top:0;background:var(--card2);font-weight:600}
+.row>div{padding:15px 20px;font-size:15px}
+.row>div:not(:first-child){text-align:center;color:var(--sub)}
+.y{color:var(--good)!important;font-weight:600}
+.n{color:var(--muted)!important}
+
+/* download */
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.dcard{background:linear-gradient(180deg,#151a23,#12151b);border:1px solid var(--line2);border-radius:18px;padding:34px;display:flex;flex-direction:column;gap:16px}
+.dcard .os{display:flex;align-items:center;gap:14px}
+.dcard .os svg{width:40px;height:40px}
+.dcard h3{font-size:22px}
+.dcard ul{list-style:none;display:grid;gap:8px;color:var(--sub);font-size:14.5px}
+.dcard li{display:flex;gap:9px}
+.dcard li svg{width:16px;height:16px;color:var(--good);flex:none;margin-top:4px}
+.dcard .btn{justify-content:center;margin-top:auto}
+.note{font-size:13.5px;color:var(--muted);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+@media(max-width:860px){.dl{grid-template-columns:1fr}}
+
+/* faq */
+.faq{max-width:820px;margin:0 auto;display:grid;gap:12px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px}
+summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:22px;color:var(--sub);font-weight:400}
+details[open] summary::after{content:"–"}
+details p{color:var(--sub);margin-top:12px;font-size:15px}
+
+/* final cta */
+.final{text-align:center;background:radial-gradient(ellipse at center,rgba(59,130,246,.18),transparent 65%);border-top:1px solid var(--line)}
+.final .cta{justify-content:center}
+footer{border-top:1px solid var(--line);padding:30px 0;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-win" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5.2 10.4 4v7.3H3V5.2Zm0 13.6 7.4 1.2v-7.2H3v6ZM11.4 3.9 21 2.5v8.8h-9.6V3.9Zm0 16.2 9.6 1.4v-8.7h-9.6v7.3Z"/></symbol>
+  <symbol id="i-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1ZM13.9 4.9c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.5-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.4Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.2 4.2L19 7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 20h14"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.5 18a9 9 0 1 1 15 0"/><path d="m12 13 4-4"/><circle cx="12" cy="13" r="1.2" fill="currentColor"/></g></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12 18 6"/></g></symbol>
+  <symbol id="i-disk" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></g></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="m16 10.5 5-3v9l-5-3"/></g></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></g></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></g></symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></g></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 4v16M12 4v16M18 4v16"/><circle cx="6" cy="9" r="2.2" fill="#14171d"/><circle cx="12" cy="15" r="2.2" fill="#14171d"/><circle cx="18" cy="11" r="2.2" fill="#14171d"/></g></symbol>
+  <symbol id="i-stream" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.6 5.6 0 0 0 0 8M16 8a5.6 5.6 0 0 1 0 8M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></g></symbol>
+</svg>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/icon.png" alt="">AD Audio Optimizer</a>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#live">LIVE OPT</a>
+      <a href="#compare">Windows &amp; Mac</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="btn btn-p" href="#download"><svg><use href="#i-down"/></svg>Download free</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>For live sound, studio and video technicians</span>
+      <h1>Zero dropouts.<br><span class="grad">Your computer, tuned for sound.</span></h1>
+      <p class="lead">One click prepares your Windows PC or Mac for recording, mixing, live shows and video work. It closes what interferes, switches off the power-saving that causes clicks and pops, gives your DAW real-time priority, and measures latency before you hit record.</p>
+      <div class="cta">
+        <a class="btn btn-p" href="downloads/AD-Audio-Optimizer-windows.zip" download><svg><use href="#i-win"/></svg>Download for Windows</a>
+        <a class="btn btn-s" href="https://github.com/aviadderi1/AudioOptimizer/releases/latest/download/AD-Audio-Optimizer-mac.zip"><svg><use href="#i-apple"/></svg>Download for Mac</a>
+      </div>
+      <div class="meta">
+        <span><svg><use href="#i-check"/></svg>Free</span>
+        <span><svg><use href="#i-check"/></svg>No installer on Windows</span>
+        <span><svg><use href="#i-check"/></svg>Every change reversible in one click</span>
+      </div>
+    </div>
+    <div class="gauge-wrap">
+      <canvas id="heroGauge" width="400" height="400" aria-label="Animated LIVE OPT gauge showing CPU cores, memory and live latency"></canvas>
+      <span class="gauge-tag">LIVE OPT · floats over your DAW</span>
+    </div>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="aud"><svg><use href="#i-speaker"/></svg><div><b>Live sound</b>FOH and monitor laptops</div></div>
+    <div class="aud"><svg><use href="#i-mic"/></svg><div><b>Studio</b>Tracking at small buffers</div></div>
+    <div class="aud"><svg><use href="#i-video"/></svg><div><b>Video</b>Capture and editing</div></div>
+    <div class="aud"><svg><use href="#i-stream"/></svg><div><b>Streaming</b>Stable live broadcasts</div></div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat"><b>40+</b><span>audio and system tweaks</span></div>
+      <div class="stat"><b>12-step</b><span>deep scan with fixes</span></div>
+      <div class="stat"><b>2 Hz</b><span>live monitor refresh</span></div>
+      <div class="stat"><b>1 click</b><span>full restore</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">The problem</div>
+      <h2>Your computer wasn't built for real-time audio</h2>
+      <p class="lead" style="margin:14px auto 0">Operating systems are tuned for battery life and background convenience. For a sound engineer that means clicks, pops and dropouts at the worst possible moment.</p>
+    </div>
+    <div class="problem">
+      <div class="pcard bad reveal">
+        <h3>Out of the box</h3>
+        <ul>
+          <li><svg><use href="#i-x"/></svg>CPU cores park and USB ports nap to save power, and the audio buffer misses its deadline</li>
+          <li><svg><use href="#i-x"/></svg>Updates, indexing, cloud sync and antivirus scans wake up mid-take</li>
+          <li><svg><use href="#i-x"/></svg>Wi‑Fi and Bluetooth drivers cause latency spikes</li>
+          <li><svg><use href="#i-x"/></svg>Notification sounds go straight through your interface</li>
+        </ul>
+        <div class="wavebox"><canvas id="badWave"></canvas></div>
+      </div>
+      <div class="pcard ok reveal">
+        <h3>After OPT</h3>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Full CPU speed, all cores awake, USB audio interface always on</li>
+          <li><svg><use href="#i-check"/></svg>Background jobs paused for the session, not deleted</li>
+          <li><svg><use href="#i-check"/></svg>Your DAW gets real-time priority over everything else</li>
+          <li><svg><use href="#i-check"/></svg>Silent system, measured latency, smaller buffers</li>
+        </ul>
+        <div class="wavebox"><canvas id="goodWave"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Features</div>
+      <h2>Everything a sound tech checks before the show, in one app</h2>
+    </div>
+    <div class="features">
+      <div class="f reveal"><div class="ic"><svg><use href="#i-bolt"/></svg></div><h3>OPT in one click</h3><p>Power plan, CPU minimum state, core parking, USB and PCIe power saving, MMCSS Pro Audio priority and timer resolution, all at once.</p></div>
+      <div class="f reveal"><div class="ic"><svg><use href="#i-gauge"/></svg></div><h3>LIVE OPT gauge</h3><p>A round meter that floats over your DAW and every other app: per-core load, CPU, memory, live latency and the app you're using. Spikes are flagged the moment they happen.</p></div>
+      <div class="f reveal"><div class="ic"><svg><use href="#i-radar"/></svg></div><h3>Deep scan</h3><p>Checks apps, startup items, scheduled tasks, power, audio drivers, services, security settings, network, disks and latency. Every finding links to its fix.</p></div>
+      <div class="f reveal"><div class="ic"><svg><use href="#i-disk"/></svg></div><h3>Disk health</h3><p>Temperature, wear and error counters for your recording drives, plus a read-only sector surface scan.<span class="tag">surface scan: Windows</span></p></div>
+      <div class="f reveal"><div class="ic"><svg><use href="#i-video"/></svg></div><h3>Built for video too</h3><p>Smooth capture and editing: no cloud sync, indexing or updates eating disk bandwidth while you record or render.</p></div>
+      <div class="f reveal"><div class="ic"><svg><use href="#i-undo"/></svg></div><h3>Safe by design</h3><p>Every original setting is backed up on disk before it changes. Restore defaults puts everything back, even after a crash or a restart.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Under the hood</div>
+      <h2>Real tweaks, explained in the app</h2>
+      <p class="lead" style="margin:14px auto 0">Hover any setting in the app for a plain-language explanation of what it does and why it helps audio.</p>
+    </div>
+    <div class="tweaks">
+      <div class="tw reveal"><h3>CPU and power</h3><ul><li>Ultimate Performance plan</li><li>CPU minimum state 100%</li><li>Core parking off</li><li>USB selective suspend off</li><li>PCIe power saving off</li></ul></div>
+      <div class="tw reveal"><h3>Audio priority</h3><ul><li>MMCSS Pro Audio priority</li><li>System responsiveness for audio</li><li>Network throttling off</li><li>0.5 ms timer resolution</li><li>DAW at High priority</li></ul></div>
+      <div class="tw reveal"><h3>Background</h3><ul><li>Windows Update, Search and SysMain paused</li><li>Defender scheduled scan paused</li><li>Cloud sync, launchers and chat closed</li><li>Notifications and system sounds muted</li></ul></div>
+      <div class="tw reveal"><h3>Deep optimize</h3><ul><li>Dynamic tick off</li><li>Green Ethernet off</li><li>USB hub power management off</li><li>Telemetry and noisy tasks off</li><li>TRIM SSD, defrag HDD</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">How it works</div>
+      <h2>Scan. OPT. Record.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="num">1</div><h3>Scan</h3><p>The app opens with a deep scan and an Audio score from 0 to 100. Each problem is listed with a dot: green is fine, orange can be improved, red needs attention.</p></div>
+      <div class="step reveal"><div class="num">2</div><h3>OPT</h3><p>Pick a profile (Recording, Mixing or Live show) or choose settings yourself, then press OPT. A backup is saved first.</p></div>
+      <div class="step reveal"><div class="num">3</div><h3>Record, then restore</h3><p>Work with LIVE OPT floating on screen. When the session ends, Restore defaults puts your computer back exactly as it was.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="live">
+  <div class="wrap live">
+    <canvas id="liveGauge" width="360" height="360" aria-label="LIVE OPT gauge"></canvas>
+    <div class="reveal">
+      <div class="kicker">LIVE OPT</div>
+      <h2>See what your computer is doing while you mix</h2>
+      <p class="lead" style="margin-top:14px">Press the red LIVE OPT button and a round gauge floats above every app. Drag it anywhere. It keeps running even after you close the main window.</p>
+      <ul>
+        <li><span class="swatch" style="background:var(--accent)"></span><span><b>Cores ring.</b> One bar per core. A single core at 100% causes dropouts even when total CPU looks low.</span></li>
+        <li><span class="swatch" style="background:var(--good)"></span><span><b>Live latency.</b> Real-time wake-up delay with a 60-second history. Spikes show up in red with the busiest app at that moment.</span></li>
+        <li><span class="swatch" style="background:var(--warn)"></span><span><b>App in use.</b> The app in front and how much CPU it takes right now.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="compare" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Windows &amp; Mac</div>
+      <h2>Made for each system</h2>
+      <p class="lead" style="margin:14px auto 0">macOS manages CPU power and timers on its own, so the Mac version focuses on what macOS lets you control.</p>
+    </div>
+    <div class="table reveal">
+      <div class="row"><div>Feature</div><div>Windows</div><div>Mac</div></div>
+      <div class="row"><div>Deep scan, Audio score, profiles</div><div class="y">✓</div><div class="y">✓</div></div>
+      <div class="row"><div>LIVE OPT floating gauge and live monitor</div><div class="y">✓</div><div class="y">✓</div></div>
+      <div class="row"><div>Close background apps (DAWs protected)</div><div class="y">✓</div><div class="y">✓</div></div>
+      <div class="row"><div>Pause updates, indexing, backups</div><div class="y">✓</div><div class="y">✓</div></div>
+      <div class="row"><div>Power plan, core parking, USB suspend, timer</div><div class="y">✓</div><div class="n">managed by macOS</div></div>
+      <div class="row"><div>Low Power Mode, App Nap, sleep</div><div class="n">—</div><div class="y">✓</div></div>
+      <div class="row"><div>Audio device sample rate and buffer</div><div class="n">via your DAW</div><div class="y">✓</div></div>
+      <div class="row"><div>Disk health</div><div class="y">✓ + sector scan</div><div class="y">✓ SMART + verify</div></div>
+      <div class="row"><div>Deep optimize (permanent tweaks)</div><div class="y">✓</div><div class="n">—</div></div>
+      <div class="row"><div>Restore defaults</div><div class="y">✓</div><div class="y">✓</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Download</div>
+      <h2>Free for Windows and Mac</h2>
+    </div>
+    <div class="dl">
+      <div class="dcard reveal">
+        <div class="os"><svg><use href="#i-win"/></svg><div><h3>Windows</h3><span class="muted">Windows 10 and 11 · 64-bit</span></div></div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Single .exe, no installer, about 120 KB zipped</li>
+          <li><svg><use href="#i-check"/></svg>Uses .NET Framework 4.8, already built into Windows</li>
+          <li><svg><use href="#i-check"/></svg>Asks for administrator rights to change system settings</li>
+        </ul>
+        <div class="note">Windows may show “Windows protected your PC” because the app isn't code-signed yet. Click <b>More info</b> → <b>Run anyway</b>.</div>
+        <a class="btn btn-p" href="downloads/AD-Audio-Optimizer-windows.zip" download><svg><use href="#i-down"/></svg>Download for Windows</a>
+      </div>
+      <div class="dcard reveal">
+        <div class="os"><svg><use href="#i-apple"/></svg><div><h3>Mac</h3><span class="muted">macOS 12 or newer · Apple Silicon and Intel</span></div></div>
+        <ul>
+          <li><svg><use href="#i-check"/></svg>Universal app for M1–M4 and Intel Macs</li>
+          <li><svg><use href="#i-check"/></svg>Unzip and drag to Applications</li>
+          <li><svg><use href="#i-check"/></svg>Asks for your password once per OPT</li>
+        </ul>
+        <div class="note">The app isn't notarized by Apple yet. First launch: right-click → <b>Open</b>. On macOS 15: try to open it once, then System Settings → Privacy &amp; Security → <b>Open Anyway</b>.</div>
+        <a class="btn btn-p" href="https://github.com/aviadderi1/AudioOptimizer/releases/latest/download/AD-Audio-Optimizer-mac.zip"><svg><use href="#i-down"/></svg>Download for Mac</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="background:var(--bg2);border-top:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="kicker">FAQ</div><h2>Questions sound techs ask</h2></div>
+    <div class="faq">
+      <details><summary>Is it safe? Can it break my system?</summary><p>Every setting is read and saved to a backup file before it changes, and Restore defaults writes the originals back. Services are paused, not deleted. Security settings like Memory Integrity are reported but never changed by the app. For Deep optimize on Windows we still recommend creating a System Restore point first.</p></details>
+      <details><summary>Will it close my DAW or my plugins?</summary><p>No. Cubase, Nuendo, Logic, Ableton Live, Pro Tools, Reaper, FL Studio, Studio One, Bitwig, live-show software and audio interface control panels are detected and protected. Before closing anything, the app shows you the list.</p></details>
+      <details><summary>Does “freeing RAM” really help?</summary><p>Only a little, and we don't pretend otherwise. Free memory doesn't make a computer faster. The real gains for audio come from power settings, priorities and stopping background jobs. The app frees only memory that's cached but unused, so sample libraries load faster.</p></details>
+      <details><summary>Is the latency number the same as LatencyMon?</summary><p>It measures the same effect, how late a real-time thread wakes up, which is what makes an audio buffer miss its deadline. It doesn't name the driver behind a spike. For per-driver analysis on Windows, use LatencyMon alongside it.</p></details>
+      <details><summary>Should I run it before every gig?</summary><p>Yes: open it, let the scan finish, press OPT, and keep LIVE OPT on screen during the show. Press Restore defaults when you pack up.</p></details>
+      <details><summary>Why does Windows or macOS warn me when I open it?</summary><p>The app isn't code-signed or notarized yet, which costs a yearly fee. The warning is about the missing signature, not about what the app does.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2 class="reveal">Hit record with confidence.</h2>
+    <p class="lead reveal" style="margin:16px auto 0">Free for Windows and Mac. Made by a live sound engineer for sound and video technicians.</p>
+    <div class="cta reveal">
+      <a class="btn btn-p" href="downloads/AD-Audio-Optimizer-windows.zip" download><svg><use href="#i-win"/></svg>Download for Windows</a>
+      <a class="btn btn-s" href="https://github.com/aviadderi1/AudioOptimizer/releases/latest/download/AD-Audio-Optimizer-mac.zip"><svg><use href="#i-apple"/></svg>Download for Mac</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> AD SOUND &amp; SERVICE · AD Audio Optimizer</span>
+    <span><a href="https://github.com/aviadderi1/AudioOptimizer">Source on GitHub</a></span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// reveal on scroll
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 }) : null;
+document.querySelectorAll('.reveal').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+
+// gauge renderer shared by hero and LIVE OPT section
+function makeGauge(canvas, opts) {
+  const size = canvas.width, dpr = window.devicePixelRatio || 1;
+  canvas.width = size * dpr; canvas.height = size * dpr;
+  const x = canvas.getContext('2d'); x.scale(dpr, dpr);
+  const c = size / 2, s = size / 270, N = opts.cores || 16;
+  let cores = new Array(N).fill(8), cpu = 7, mem = 46, lat = 95, hist = [], spike = 0, t = 0;
+  const S = Math.PI * 0.75, E = Math.PI * 2.25;
+  function arc(r, w, a, b, col) { x.beginPath(); x.arc(c, c, r * s, a, b); x.strokeStyle = col; x.lineWidth = w * s; x.lineCap = 'round'; x.stroke(); }
+  function txt(str, px, weight, col, y) { x.font = weight + ' ' + (px * s) + 'px -apple-system,Segoe UI,Roboto,sans-serif'; x.fillStyle = col; x.textAlign = 'center'; x.fillText(str, c, y * s); }
+  function draw() {
+    x.clearRect(0, 0, size, size);
+    x.beginPath(); x.arc(c, c, 133 * s, 0, Math.PI * 2); x.fillStyle = '#121419'; x.fill(); x.strokeStyle = '#2a2f3a'; x.lineWidth = 1.5; x.stroke();
+    cores.forEach((v, i) => {
+      const a = S + (E - S) * (i + .5) / N, r0 = 115 * s, r1 = r0 + Math.max(3, v / 100 * 14) * s;
+      x.beginPath(); x.moveTo(c + Math.cos(a) * r0, c + Math.sin(a) * r0); x.lineTo(c + Math.cos(a) * r1, c + Math.sin(a) * r1);
+      x.strokeStyle = v > 85 ? '#f05050' : v > 60 ? '#f5aa28' : '#3b82f6'; x.lineWidth = 4.5 * s; x.lineCap = 'round'; x.stroke();
+    });
+    arc(101, 9, S, E, '#2e3440'); arc(101, 9, S, S + (E - S) * cpu / 100, cpu > 50 ? '#f5aa28' : '#3b82f6');
+    arc(87, 6, S, E, '#2e3440'); arc(87, 6, S, S + (E - S) * mem / 100, '#34d378');
+    const lc = lat > 1000 ? '#f05050' : lat > 500 ? '#f5aa28' : '#34d378';
+    txt('LATENCY', 8.5, '500', '#969eaa', 92);
+    txt(Math.round(lat).toLocaleString('en-US'), 34, '700', lc, 134);
+    txt('µs', 10, '400', lc, 151);
+    x.beginPath(); hist.forEach((v, i) => { const px = c + (-52 + i * 104 / 59) * s, py = (182 - Math.min(1, v / 1000) * 20) * s; i ? x.lineTo(px, py) : x.moveTo(px, py); });
+    x.strokeStyle = lc; x.globalAlpha = .85; x.lineWidth = 1.3 * s; x.stroke(); x.globalAlpha = 1;
+    txt(opts.app + ' · ' + Math.round(cpu * .6) + '%', 9.5, '400', '#e8eaed', 202);
+    txt('CPU ' + Math.round(cpu) + '%   RAM ' + Math.round(mem) + '%', 8, '400', '#969eaa', 217);
+    if (spike > 0) { txt('Spike 1,240 µs · chrome 18%', 8, '600', '#f05050', 233); spike--; }
+  }
+  function step() {
+    t++;
+    cpu = Math.max(3, cpu * .8 + Math.random() * 4 + (t % 50 < 5 ? 10 : 0));
+    mem = 46 + Math.sin(t / 40) * 1.5;
+    lat = Math.max(45, lat * .65 + Math.random() * 55 + 25);
+    if (opts.spikes && Math.random() < .015) { lat = 1240; spike = 14; }
+    hist.push(lat); if (hist.length > 60) hist.shift();
+    cores = cores.map((v, i) => Math.max(2, Math.min(100, v * .5 + Math.random() * cpu * (i === 3 ? 3 : 1.3))));
+    draw();
+  }
+  for (let i = 0; i < 60; i++) step();
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce) setInterval(step, 260);
+}
+makeGauge(document.getElementById('heroGauge'), { app: 'Cubase 14', cores: 16, spikes: false });
+makeGauge(document.getElementById('liveGauge'), { app: 'Logic Pro', cores: 12, spikes: true });
+
+// before / after waveforms
+function wave(id, clicks) {
+  const cv = document.getElementById(id), dpr = window.devicePixelRatio || 1;
+  function draw() {
+    const w = cv.clientWidth, h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr;
+    const x = cv.getContext('2d'); x.scale(dpr, dpr);
+    x.strokeStyle = clicks ? '#7a8392' : '#34d378'; x.lineWidth = 1.4; x.beginPath();
+    for (let i = 0; i < w; i++) {
+      const tt = i / w;
+      let y = Math.sin(tt * 48) * Math.sin(tt * 6.3) * .55 + Math.sin(tt * 130) * .12;
+      x[i ? 'lineTo' : 'moveTo'](i, h / 2 + y * h * .38);
+    }
+    x.stroke();
+    if (clicks) {
+      x.strokeStyle = '#e5484d'; x.lineWidth = 2;
+      [.18, .43, .71, .88].forEach(p => { const px = p * w; x.beginPath(); x.moveTo(px, 6); x.lineTo(px + 2, h - 6); x.stroke(); x.fillStyle = 'rgba(229,72,77,.14)'; x.fillRect(px - 8, 0, 18, h); });
+    }
+  }
+  draw(); window.addEventListener('resize', draw);
+}
+wave('badWave', true); wave('goodWave', false);
+</script>
+</body>
+</html>
