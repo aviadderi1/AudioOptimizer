@@ -349,7 +349,13 @@ final class MainController: NSObject, NSWindowDelegate {
             appsList.addRow(row)
         }
         if !any { appsList.addRow(dotRow(.good, "No background apps to close", width: appsList.contentWidth).0) }
-        for d in daws { appsList.addRow(dotRow(.none, "Protected · " + d, width: appsList.contentWidth, color: Theme.sub).0) }
+        for d in daws where d.lowercased().replacingOccurrences(of: " ", with: "").hasPrefix("superrack") {
+            appsList.addRow(dotRow(.info, "★ \(d) · protected · top priority", width: appsList.contentWidth, color: NSColor(srgbRed: 245/255, green: 192/255, blue: 74/255, alpha: 1)).0)
+        }
+        for d in daws where !d.lowercased().replacingOccurrences(of: " ", with: "").hasPrefix("superrack") {
+            appsList.addRow(dotRow(.none, "Protected · " + d, width: appsList.contentWidth, color: Theme.sub).0)
+        }
+        appsList.addRow(dotRow(.none, "Protected · Waves services", width: appsList.contentWidth, color: Theme.sub).0)
     }
 
     // MARK: live

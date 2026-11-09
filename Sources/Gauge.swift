@@ -50,6 +50,7 @@ final class GaugeView: NSView {
     private var appCPU: Double = 0
     private var busiest = ""
     private var lastTable = Date.distantPast
+    private var srCPU: Double = -1
     private var spike: String?
     private var spikeUntil = Date.distantPast
     private var hoverClose = false
@@ -71,6 +72,7 @@ final class GaugeView: NSView {
                 let top = t.values.filter { $0.name != "ADAudioOptimizer" && $0.name != "kernel_task" }.max { $0.cpu < $1.cpu }
                 DispatchQueue.main.async {
                     if let p = pid, let row = t[p] { self.appCPU = row.cpu / Double(max(1, ProcessInfo.processInfo.activeProcessorCount)) }
+                    if let sr = Apps.superRack().first, let row = t[sr.processIdentifier] { self.srCPU = row.cpu / Double(max(1, ProcessInfo.processInfo.activeProcessorCount)) } else { self.srCPU = -1 }
                     self.busiest = top.map { "\($0.name) \(Int($0.cpu.rounded()))%" } ?? ""
                 }
             }
@@ -188,8 +190,12 @@ final class GaugeView: NSView {
             p.stroke()
         }
 
-        let app = appName.count > 22 ? String(appName.prefix(21)) + "…" : appName
-        text("\(app) · \(Int(appCPU.rounded()))%", 11, .regular, Theme.text, 198)
+        if srCPU >= 0 {
+            text("★ SuperRack · \(Int(srCPU.rounded()))%", 11, .semibold, NSColor(srgbRed: 245/255, green: 192/255, blue: 74/255, alpha: 1), 198)
+        } else {
+            let app = appName.count > 22 ? String(appName.prefix(21)) + "…" : appName
+            text("\(app) · \(Int(appCPU.rounded()))%", 11, .regular, Theme.text, 198)
+        }
         text("CPU \(Int(d.cpu.rounded()))%   MEM \(Int(d.mem.rounded()))%", 9.5, .regular, Theme.sub, 214)
         if let s = spike, Date() < spikeUntil {
             text(s.count > 30 ? String(s.prefix(29)) + "…" : s, 9.5, .semibold, Theme.bad, 229)

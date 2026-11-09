@@ -38,10 +38,46 @@ enum Apps {
         ]
     }
 
-    static let dawPrefixes = ["com.apple.logic", "com.apple.mainstage", "com.apple.garageband", "com.ableton", "com.steinberg", "com.image-line", "com.presonus",
+    static let dawPrefixes = ["com.waves.superrack", "com.apple.logic", "com.apple.mainstage", "com.apple.garageband", "com.ableton", "com.steinberg", "com.image-line", "com.presonus",
                               "com.bitwig", "com.avid", "com.cockos", "com.motu", "com.native-instruments", "com.waves", "com.reasonstudios", "com.propellerheads",
                               "com.audiodamage", "com.celemony", "com.izotope", "com.serato", "com.atomixproductions.virtualDJ", "com.pioneerdj", "com.apple.audio.AudioMIDISetup",
                               "com.focusrite", "com.universal-audio", "com.rme", "com.gigperformer", "com.audiolabs", "com.apple.FinalCut"]
+
+    static func isSuperRack(_ app: NSRunningApplication) -> Bool {
+        let b = (app.bundleIdentifier ?? "").lowercased(), n = (app.localizedName ?? "").lowercased().replacingOccurrences(of: " ", with: "")
+        return b.contains("superrack") || n.hasPrefix("superrack")
+    }
+
+    static func superRack() -> [NSRunningApplication] {
+        return NSWorkspace.shared.runningApplications.filter { isSuperRack($0) }
+    }
+
+    static func wavesEnginePids() -> [Int32] {
+        return processTable().filter { let n = $0.value.name.lowercased().replacingOccurrences(of: " ", with: ""); return n.hasPrefix("waves") && (n.contains("license") || n.contains("localserver") || n.contains("engine")) }.map { $0.key }
+    }
+
+    static let wavesRoots = ["/Applications/Waves", "/Library/Application Support/Waves"]
+
+    static func wavesFolders() -> [String] {
+        let fm = FileManager.default
+        var list = wavesRoots.filter { fm.fileExists(atPath: $0) }
+        for dir in ["/Library/Audio/Plug-Ins/VST3", "/Library/Audio/Plug-Ins/Components", "/Library/Audio/Plug-Ins/VST"] {
+            if let items = try? fm.contentsOfDirectory(atPath: dir) {
+                for i in items where i.hasPrefix("WaveShell") { list.append(dir + "/" + i) }
+            }
+        }
+        return list
+    }
+
+    static func folderSize(_ path: String) -> (Double, Int) {
+        var size: Double = 0, files = 0
+        if let e = FileManager.default.enumerator(at: URL(fileURLWithPath: path), includingPropertiesForKeys: [.fileSizeKey, .isRegularFileKey]) {
+            for case let u as URL in e {
+                if let v = try? u.resourceValues(forKeys: [.fileSizeKey, .isRegularFileKey]), v.isRegularFile == true { size += Double(v.fileSize ?? 0); files += 1 }
+            }
+        }
+        return (size, files)
+    }
 
     static func isProtected(_ app: NSRunningApplication) -> Bool {
         let b = (app.bundleIdentifier ?? "").lowercased()
@@ -107,8 +143,11 @@ enum Catalog {
             Item(id: "timemachine", label: "Pause Time Machine", tip: "No automatic backups during the session."),
             Item(id: "swupdate", label: "Pause software update checks", tip: "No automatic update checks or downloads during the session."),
         ]),
-        Section(title: "Audio", tip: "Gives your DAW priority and silences system sounds that could land in a recording.", items: [
-            Item(id: "dawprio", label: "DAW process priority high", tip: "Raises the priority of running audio apps (Logic, Ableton, Cubase and more)."),
+        Section(title: "SuperRack and audio", tip: "SuperRack Performer is the most important app: it gets the highest priority, then your DAWs. Waves plugins load faster. System sounds are silenced.", items: [
+            Item(id: "superrack", label: "★ SuperRack Performer first", tip: "Gives SuperRack Performer the highest priority on this Mac, one level above your DAWs."),
+            Item(id: "wavesle", label: "★ Waves License Engine priority", tip: "Waves checks the license on every plugin load. Higher priority keeps plugin loading fast."),
+            Item(id: "wavespreload", label: "★ Preload Waves plugins", tip: "After memory is freed, reads the Waves plugin files once so macOS keeps them in memory. Sessions load from memory instead of disk."),
+            Item(id: "dawprio", label: "DAW priority high", tip: "Raises the priority of running audio apps (Logic, Ableton, Cubase and more), one level below SuperRack Performer."),
             Item(id: "alerts", label: "Mute system alert sounds", tip: "No alert beeps going through your audio interface."),
             Item(id: "srcheck", label: "Check sample rate and buffer", tip: "Reports the current audio device, sample rate and buffer size, and warns about mismatches."),
         ]),
@@ -122,7 +161,7 @@ enum Catalog {
     static let profiles = ["Recording", "Mixing", "Live show", "Custom"]
     static let profileDesc = ["Recording: lowest latency, everything paused.", "Mixing: everything on, Wi‑Fi stays on for plugin licenses.",
                               "Live show: Wi‑Fi stays on for tablet mixer control.", "Custom: your own selection of settings."]
-    static let base: Set<String> = ["lowpower", "nosleep", "appnap", "visual", "spotlight", "timemachine", "swupdate", "dawprio", "alerts", "srcheck", "purge", "diskcheck"]
+    static let base: Set<String> = ["superrack", "wavesle", "wavespreload", "lowpower", "nosleep", "appnap", "visual", "spotlight", "timemachine", "swupdate", "dawprio", "alerts", "srcheck", "purge", "diskcheck"]
 
     static func profileSet(_ p: Int) -> Set<String> {
         var s = base

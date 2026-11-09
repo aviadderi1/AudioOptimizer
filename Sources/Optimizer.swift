@@ -125,12 +125,28 @@ final class Optimizer {
             backup.add("wifi|" + dev, "on")
             add("wifi", "Turn off Wi‑Fi", "/usr/sbin/networksetup -setairportpower \(dev) off")
         }
+        if sel.contains("superrack") {
+            let sr = Apps.superRack().map { String($0.processIdentifier) }
+            if sr.isEmpty { log.append(Optimizer.info + "SuperRack Performer isn't running. Open it, then press OPT again to give it top priority.") }
+            else {
+                backup.add("runtime|superrack", sr.joined(separator: ","))
+                add("superrack", "★ SuperRack Performer first (highest priority)", "/usr/bin/renice -n -15 -p " + sr.joined(separator: " "))
+            }
+        }
+        if sel.contains("wavesle") {
+            let pids = Apps.wavesEnginePids().map { String($0) }
+            if pids.isEmpty { log.append(Optimizer.info + "Waves License Engine isn't running right now") }
+            else {
+                backup.add("runtime|wavesle", pids.joined(separator: ","))
+                add("wavesle", "★ Waves License Engine priority", "/usr/bin/renice -n -10 -p " + pids.joined(separator: " "))
+            }
+        }
         if sel.contains("dawprio") {
-            let daws = NSWorkspace.shared.runningApplications.filter { Apps.isProtected($0) && $0.activationPolicy == .regular }
-            if daws.isEmpty { log.append(Optimizer.info + "DAW priority: no DAW running right now") }
+            let daws = NSWorkspace.shared.runningApplications.filter { Apps.isProtected($0) && !Apps.isSuperRack($0) && $0.activationPolicy == .regular }
+            if daws.isEmpty { log.append(Optimizer.info + "DAW priority: no other DAW running right now") }
             else {
                 backup.add("runtime|dawprio", daws.map { String($0.processIdentifier) }.joined(separator: ","))
-                add("dawprio", "DAW process priority high", "/usr/bin/renice -n -10 -p " + daws.map { String($0.processIdentifier) }.joined(separator: " "))
+                add("dawprio", "DAW priority high", "/usr/bin/renice -n -10 -p " + daws.map { String($0.processIdentifier) }.joined(separator: " "))
             }
         }
         if !script.isEmpty {
@@ -139,7 +155,7 @@ final class Optimizer {
             if !ok && !out.contains("OK:") && !out.contains("FAIL:") {
                 for id in labels.keys { log.append(Optimizer.fail + labels[id]! + " (password not given)") }
                 for k in ["lowpower", "spotlight", "timemachine", "swupdate"] where labels[k] != nil { backup.remove(k) }
-                backup.items.filter { $0.0.hasPrefix("wifi|") || $0.0 == "runtime|dawprio" }.forEach { backup.remove($0.0) }
+                backup.items.filter { $0.0.hasPrefix("wifi|") || $0.0.hasPrefix("runtime|") && $0.0 != "runtime|nosleep" }.forEach { backup.remove($0.0) }
             } else {
                 for line in out.components(separatedBy: CharacterSet.newlines) {
                     if line.hasPrefix("OK:"), let l = labels[String(line.dropFirst(3))] { log.append(Optimizer.ok + l) }
@@ -148,6 +164,10 @@ final class Optimizer {
             }
         }
 
+        if sel.contains("wavespreload") {
+            progress("Preloading Waves plugins…")
+            log.append(preloadWaves(progress))
+        }
         if sel.contains("srcheck") {
             if let id = Audio.defaultDevice(input: false) {
                 let d = Audio.info(id)
@@ -173,7 +193,7 @@ final class Optimizer {
             case "spotlight": script += "/usr/bin/mdutil -a -i on\n"
             case "timemachine": script += "/usr/bin/tmutil enable\n"
             case "swupdate": script += "/usr/sbin/softwareupdate --schedule on\n"
-            case "runtime|dawprio": script += "/usr/bin/renice -n 0 -p " + v.replacingOccurrences(of: ",", with: " ") + "\n"
+            case "runtime|dawprio", "runtime|superrack", "runtime|wavesle": script += "/usr/bin/renice -n 0 -p " + v.replacingOccurrences(of: ",", with: " ") + " 2>/dev/null\n"
             case "appnap": Shell.run("/usr/bin/defaults", ["delete", "NSGlobalDomain", "NSAppSleepDisabled"]); log.append(Optimizer.ok + "App Nap back on")
             case "visual":
                 Shell.run("/usr/bin/defaults", ["write", "com.apple.universalaccess", "reduceMotion", "-bool", "false"])
@@ -193,6 +213,34 @@ final class Optimizer {
         }
         backup.clear()
         return log
+    }
+
+    /// Reads the Waves plugin files once so macOS keeps them in its file cache (runs after purge).
+    private func preloadWaves(_ progress: @escaping (String) -> Void) -> String {
+        let folders = Apps.wavesFolders()
+        if folders.isEmpty { return Optimizer.info + "Waves plugins not found in /Applications/Waves or /Library/Audio/Plug-Ins" }
+        let budget = max(0, (LiveData.shared.memTotal - LiveData.shared.memUsed) * 0.5)
+        var read: Double = 0, count = 0
+        let start = Date()
+        let skip: Set<String> = ["pdf", "txt", "html", "png", "jpg", "log"]
+        outer: for root in folders {
+            guard let e = FileManager.default.enumerator(at: URL(fileURLWithPath: root), includingPropertiesForKeys: [.isRegularFileKey]) else { continue }
+            for case let u as URL in e {
+                if read >= budget { break outer }
+                if skip.contains(u.pathExtension.lowercased()) { continue }
+                guard (try? u.resourceValues(forKeys: [.isRegularFileKey]))?.isRegularFile == true, let h = try? FileHandle(forReadingFrom: u) else { continue }
+                while true {
+                    let d = h.readData(ofLength: 1 << 20)
+                    if d.isEmpty { break }
+                    read += Double(d.count)
+                    if read >= budget { break }
+                }
+                try? h.close()
+                count += 1
+                if count % 200 == 0 { progress("Preloading Waves plugins… " + formatBytes(read)) }
+            }
+        }
+        return Optimizer.ok + "★ Preload Waves plugins (\(formatBytes(read)) in \(count) files, \(Int(Date().timeIntervalSince(start))) s)"
     }
 
     func keepRuntime() {

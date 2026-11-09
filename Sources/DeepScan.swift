@@ -143,7 +143,34 @@ final class DeepScan {
         if !spot && !tm { add(.good, "Spotlight and Time Machine are paused") }
     }
 
+    private func superRack() {
+        let sr = Apps.superRack()
+        if sr.isEmpty {
+            add(.info, "★ SuperRack Performer isn't running now", tip: "Open it before pressing OPT so it gets the highest priority.")
+            res.states["superrack"] = .none
+        } else {
+            let table = Shell.run("/bin/ps", ["-o", "ni=", "-p", String(sr[0].processIdentifier)]).1.trimmingCharacters(in: .whitespacesAndNewlines)
+            let nice = Int(table) ?? 0
+            state("superrack", nice <= -15)
+            add(nice <= -15 ? .good : .fix, "★ SuperRack Performer running · priority " + (nice <= -15 ? "highest" : "normal"),
+                tip: nice <= -15 ? nil : "OPT gives SuperRack Performer the highest priority on this Mac.", setting: nice <= -15 ? nil : "superrack")
+        }
+        let le = Apps.wavesEnginePids()
+        res.states["wavesle"] = le.isEmpty ? DotState.none : .fix
+        let folders = Apps.wavesFolders()
+        if folders.isEmpty {
+            add(.info, "Waves plugins not found in the usual folders")
+            res.states["wavespreload"] = DotState.none
+        } else {
+            var size: Double = 0, files = 0
+            for f in folders { let r = Apps.folderSize(f); size += r.0; files += r.1 }
+            add(.good, "Waves installed · \(formatBytes(size)) in \(files) files", tip: folders.joined(separator: ", "))
+            res.states["wavespreload"] = .fix
+        }
+    }
+
     private func audio() {
+        superRack()
         guard let id = Audio.defaultDevice(input: false) else { add(.fix, "No audio output device found"); return }
         let d = Audio.info(id)
         add(d.transport == "Bluetooth" ? .bad : .good, "Output: \(d.name) · \(d.transport) · \(Int(d.sampleRate)) Hz · buffer \(d.bufferFrames)",
