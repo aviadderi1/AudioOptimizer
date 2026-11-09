@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleName</key><string>AD Audio Optimizer</string>
+  <key>CFBundleDisplayName</key><string>AD Audio Optimizer</string>
+  <key>CFBundleIdentifier</key><string>com.adsound.audiooptimizer</string>
+  <key>CFBundleExecutable</key><string>ADAudioOptimizer</string>
+  <key>CFBundleIconFile</key><string>AppIcon</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>CFBundleShortVersionString</key><string>1.0</string>
+  <key>CFBundleVersion</key><string>1</string>
+  <key>LSMinimumSystemVersion</key><string>12.0</string>
+  <key>NSHighResolutionCapable</key><true/>
+  <key>NSHumanReadableCopyright</key><string>AD SOUND &amp; SERVICE</string>
+  <key>NSAppleEventsUsageDescription</key><string>AD Audio Optimizer uses AppleScript to ask for your password and to mute alert sounds.</string>
+</dict>
+</plist>
