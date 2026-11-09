@@ -539,7 +539,7 @@ final class MainController: NSObject, NSWindowDelegate {
                 let w = self.diskList.contentWidth
                 for d in disks {
                     let st: DotState = d.smart == "Verified" ? .good : d.smart == "Not Supported" ? .info : .bad
-                    self.diskList.addRow(dotRow(st, "\(d.id) · \(d.name) · \(d.ssd ? "SSD" : "HDD") · \(d.bus) · \(formatBytes(d.size)) · \(d.internal ? "internal" : "external") · SMART: \(d.smart)", width: w,
+                    self.diskList.addRow(dotRow(st, "\(d.id) · \(d.name) · \(d.ssd ? "SSD" : "HDD") · \(d.bus) · \(formatBytes(d.size)) · \(d.isInternal ? "internal" : "external") · SMART: \(d.smart)", width: w,
                                                tip: st == .bad ? "The disk reports a problem. Back up now and run First Aid in Disk Utility." : nil).0)
                 }
                 let hours = fs.free / (16.0 * 48000 * 3 * 3600)

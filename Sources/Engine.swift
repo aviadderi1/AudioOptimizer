@@ -227,7 +227,7 @@ enum Audio {
 // MARK: - Disks
 
 struct DiskInfo {
-    let id: String, name: String, size: Double, ssd: Bool, smart: String, bus: String, internal: Bool
+    let id: String, name: String, size: Double, ssd: Bool, smart: String, bus: String, isInternal: Bool
 }
 
 enum Disks {
@@ -243,7 +243,7 @@ enum Disks {
             guard let i = plist(["info", "-plist", id]) else { return nil }
             return DiskInfo(id: id, name: (i["MediaName"] as? String) ?? id, size: (i["Size"] as? Double) ?? Double((i["TotalSize"] as? Int) ?? 0),
                             ssd: (i["SolidState"] as? Bool) ?? false, smart: (i["SMARTStatus"] as? String) ?? "Not Supported",
-                            bus: (i["BusProtocol"] as? String) ?? "", internal: (i["Internal"] as? Bool) ?? false)
+                            bus: (i["BusProtocol"] as? String) ?? "", isInternal: (i["Internal"] as? Bool) ?? false)
         }
     }
 
