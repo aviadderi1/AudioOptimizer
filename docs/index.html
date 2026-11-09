@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AD Audio Optimizer · Your computer, tuned for sound</title>
-<meta name="description" content="Free one-click optimizer that prepares Windows and Mac for recording, mixing, live sound and video work. No dropouts, lower latency, everything reversible.">
-<meta property="og:title" content="AD Audio Optimizer · Your computer, tuned for sound">
-<meta property="og:description" content="One click prepares your Windows PC or Mac for recording, mixing, live shows and video editing.">
+<title>AD Audio Optimizer · SuperRack Performer and Waves, first in line</title>
+<meta name="description" content="Free optimizer for live sound: puts SuperRack Performer first, preloads Waves plugins into memory and clears everything that causes clicks. Windows and Mac, fully reversible.">
+<meta property="og:title" content="AD Audio Optimizer · SuperRack Performer and Waves, first in line">
+<meta property="og:description" content="SuperRack Performer gets top priority, Waves plugins load from memory, your DAW comes next. One click, fully reversible.">
 <meta property="og:image" content="assets/icon.png">
 <meta name="theme-color" content="#0b0d11">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <style>
-:root{
+:root{--gold:#f5c04a;
   --bg:#0b0d11;--bg2:#101318;--card:#14171d;--card2:#1b1f27;--line:#232832;--line2:#2f3542;
   --text:#e8eaed;--sub:#9aa3b0;--muted:#6b7380;--accent:#3b82f6;--accent2:#7fb0ff;--good:#34d378;--warn:#f5aa28;--red:#e5484d;
   --r:14px;--max:1180px;
@@ -41,6 +41,31 @@ section{padding:96px 0}
 .section-head{max-width:720px;margin:0 auto 52px;text-align:center}
 .section-head p{margin-top:14px}
 .kicker{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px}
+
+/* superrack */
+.eyebrow.gold{color:var(--gold);border-color:#5a4514;background:#1d170a}
+.eyebrow.gold .dot{background:var(--gold);box-shadow:0 0 0 3px rgba(245,192,74,.18)}
+.chain{display:grid;grid-template-columns:1.3fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:10px}
+.node{background:var(--card);border:1px solid var(--line2);border-radius:12px;padding:16px 18px}
+.node b{display:block;font-size:15.5px;font-weight:600}
+.node span{color:var(--sub);font-size:13.5px}
+.node.top{border-color:#6b5218;background:linear-gradient(180deg,#221a09,#17130a)}
+.node.top b{color:var(--gold)}
+.node.dim b{color:var(--muted)}
+.chev{color:#3d4554;font-size:22px;text-align:center}
+@media(max-width:900px){.chain{grid-template-columns:1fr}.chev{transform:rotate(90deg)}}
+.wf{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.wf .f .ic{background:#1d170a}.wf .f .ic svg{color:var(--gold)}
+@media(max-width:960px){.wf{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.wf{grid-template-columns:1fr}}
+.loadviz{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:grid;gap:18px}
+.lrow{display:grid;grid-template-columns:130px 1fr;gap:16px;align-items:center}
+.lbar{height:34px;border-radius:9px;background:var(--bg2);border:1px solid var(--line);overflow:hidden;display:flex}
+.lbar i{display:flex;align-items:center;padding:0 12px;font-style:normal;font-size:12.5px;font-weight:600;color:#0b0d11;white-space:nowrap;overflow:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:18px;color:var(--sub);font-size:13.5px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+@media(max-width:640px){.lrow{grid-template-columns:1fr}}
 
 /* nav */
 nav{position:sticky;top:0;z-index:50;background:rgba(11,13,17,.82);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
@@ -191,6 +216,9 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
   <symbol id="i-mic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></g></symbol>
   <symbol id="i-speaker" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></g></symbol>
   <symbol id="i-sliders" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 4v16M12 4v16M18 4v16"/><circle cx="6" cy="9" r="2.2" fill="#14171d"/><circle cx="12" cy="15" r="2.2" fill="#14171d"/><circle cx="18" cy="11" r="2.2" fill="#14171d"/></g></symbol>
+  <symbol id="i-crown" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5L3 8Z"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9m-3 3 3 3m-6 0 2 2"/></g></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3 4.5 6v6c0 4.5 3.2 7.8 7.5 9 4.3-1.2 7.5-4.5 7.5-9V6L12 3Z"/><path d="m9 12 2 2 4-4"/></g></symbol>
   <symbol id="i-stream" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.6 5.6 0 0 0 0 8M16 8a5.6 5.6 0 0 1 0 8M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/></g></symbol>
 </svg>
 
@@ -198,7 +226,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
   <div class="wrap">
     <a class="brand" href="#"><img src="assets/icon.png" alt="">AD Audio Optimizer</a>
     <div class="links">
-      <a href="#features">Features</a>
+      <a href="#superrack">SuperRack</a>
+      <a href="#waves">Waves plugins</a>
       <a href="#how">How it works</a>
       <a href="#live">LIVE OPT</a>
       <a href="#compare">Windows &amp; Mac</a>
@@ -211,9 +240,9 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 <header class="hero">
   <div class="wrap">
     <div>
-      <span class="eyebrow"><span class="dot"></span>For live sound, studio and video technicians</span>
-      <h1>Zero dropouts.<br><span class="grad">Your computer, tuned for sound.</span></h1>
-      <p class="lead">One click prepares your Windows PC or Mac for recording, mixing, live shows and video work. It closes what interferes, switches off the power-saving that causes clicks and pops, gives your DAW real-time priority, and measures latency before you hit record.</p>
+      <span class="eyebrow gold"><span class="dot"></span>★ Built for SuperRack Performer and Waves plugins</span>
+      <h1>Your SuperRack rig.<br><span class="grad">First in line. Every show.</span></h1>
+      <p class="lead">AD Audio Optimizer puts SuperRack Performer at the top of your computer's priority list, loads your Waves plugins from memory instead of disk, gives your DAW the next place in line, and clears everything that causes clicks before doors open.</p>
       <div class="cta">
         <a class="btn btn-p" href="https://github.com/aviadderi1/AudioOptimizer/releases/latest/download/AD-Audio-Optimizer-windows.zip"><svg><use href="#i-win"/></svg>Download for Windows</a>
         <a class="btn btn-s" href="https://github.com/aviadderi1/AudioOptimizer/releases/latest/download/AD-Audio-Optimizer-mac.zip"><svg><use href="#i-apple"/></svg>Download for Mac</a>
@@ -225,8 +254,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
       </div>
     </div>
     <div class="gauge-wrap">
-      <canvas id="heroGauge" width="400" height="400" aria-label="Animated LIVE OPT gauge showing CPU cores, memory and live latency"></canvas>
-      <span class="gauge-tag">LIVE OPT · floats over your DAW</span>
+      <canvas id="heroGauge" width="400" height="400" aria-label="Animated LIVE OPT gauge showing SuperRack CPU, cores, memory and live latency"></canvas>
+      <span class="gauge-tag">LIVE OPT · always shows SuperRack</span>
     </div>
   </div>
 </header>
@@ -245,13 +274,56 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
     <div class="stats reveal">
       <div class="stat"><b>40+</b><span>audio and system tweaks</span></div>
       <div class="stat"><b>12-step</b><span>deep scan with fixes</span></div>
-      <div class="stat"><b>2 Hz</b><span>live monitor refresh</span></div>
+      <div class="stat"><b style="color:var(--gold)">★ #1</b><span>SuperRack priority</span></div>
       <div class="stat"><b>1 click</b><span>full restore</span></div>
     </div>
   </div>
 </section>
 
-<section style="padding-top:0">
+<section id="superrack" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker" style="color:var(--gold)">★ SuperRack Performer first</div>
+      <h2>A clear priority chain for live sound</h2>
+      <p class="lead" style="margin:14px auto 0">When the CPU is busy, the operating system decides who goes first. AD Audio Optimizer makes that decision for you, so the rack your show depends on never waits.</p>
+    </div>
+    <div class="chain reveal">
+      <div class="node top"><b>★ SuperRack Performer</b><span>CPU and disk priority High. Windows starts it at High every time, even when the optimizer is closed.</span></div>
+      <div class="chev">›</div>
+      <div class="node"><b>Waves License Engine</b><span>High priority for license checks on every plugin load.</span></div>
+      <div class="chev">›</div>
+      <div class="node"><b>Your DAW</b><span>Cubase, Logic, Ableton, Reaper, Pro Tools and more. CPU and disk High.</span></div>
+      <div class="chev">›</div>
+      <div class="node dim"><b>Everything else</b><span>Background apps closed or paused for the show.</span></div>
+    </div>
+    <p class="muted reveal" style="text-align:center;margin-top:18px">On Windows, SuperRack and your DAW share the top CPU class (Realtime is avoided on purpose: it can freeze the mouse mid-show). SuperRack leads with permanent High start, disk priority, preload and its own license boost. On Mac, SuperRack sits one priority level above your DAWs.</p>
+  </div>
+</section>
+
+<section id="waves" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker" style="color:var(--gold)">Waves plugins</div>
+      <h2>Faster session loads in SuperRack</h2>
+      <p class="lead" style="margin:14px auto 0">Waves plugins run inside SuperRack Performer, so they share its top priority. On top of that, the optimizer removes the three things that slow a big session down when it loads.</p>
+    </div>
+    <div class="wf">
+      <div class="f reveal"><div class="ic"><svg><use href="#i-crown"/></svg></div><h3>SuperRack first</h3><p>CPU and disk (I/O) priority High while it runs, and a permanent High start on Windows. Undone by Restore defaults.</p></div>
+      <div class="f reveal"><div class="ic"><svg><use href="#i-bolt"/></svg></div><h3>Preload Waves</h3><p>Right after memory is cleaned, your Waves plugin and WaveShell files are read once, so the system keeps them in memory and SuperRack loads them from RAM.</p></div>
+      <div class="f reveal"><div class="ic"><svg><use href="#i-key"/></svg></div><h3>License Engine boost</h3><p>Waves checks the license each time a plugin loads. The License Engine gets High priority and is never closed.</p></div>
+      <div class="f reveal"><div class="ic"><svg><use href="#i-shield"/></svg></div><h3>Fewer scans at load<span class="tag">Windows</span></h3><p>Defender scans every plugin file Waves opens. The Waves folders are excluded until you press Restore defaults.</p></div>
+    </div>
+    <div class="loadviz reveal" style="margin-top:22px">
+      <h3>Where the time goes when a session loads</h3>
+      <div class="lrow"><span class="sub">Before</span><div class="lbar"><i style="width:36%;background:#7a8392">Disk read</i><i style="width:34%;background:var(--warn)">Antivirus scan</i><i style="width:30%;background:#e5484d;color:#fff">Waiting for CPU</i></div></div>
+      <div class="lrow"><span class="sub">After OPT</span><div class="lbar"><i style="width:22%;background:var(--good)">From memory</i></div></div>
+      <div class="legend"><span><i style="background:#7a8392"></i>Reading plugin files from disk</span><span><i style="background:var(--warn)"></i>Antivirus scanning each file</span><span><i style="background:#e5484d"></i>Waiting behind other apps</span><span><i style="background:var(--good)"></i>Loaded from memory, top priority</span></div>
+      <p class="muted">An illustration of the stages a load goes through, not a measured benchmark. Actual times depend on your computer, disk and session size.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:96px">
   <div class="wrap">
     <div class="section-head reveal">
       <div class="kicker">The problem</div>
@@ -274,7 +346,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
         <ul>
           <li><svg><use href="#i-check"/></svg>Full CPU speed, all cores awake, USB audio interface always on</li>
           <li><svg><use href="#i-check"/></svg>Background jobs paused for the session, not deleted</li>
-          <li><svg><use href="#i-check"/></svg>Your DAW gets real-time priority over everything else</li>
+          <li><svg><use href="#i-check"/></svg>SuperRack Performer and your DAW go first, ahead of everything else</li>
           <li><svg><use href="#i-check"/></svg>Silent system, measured latency, smaller buffers</li>
         </ul>
         <div class="wavebox"><canvas id="goodWave"></canvas></div>
@@ -287,7 +359,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
   <div class="wrap">
     <div class="section-head reveal">
       <div class="kicker">Features</div>
-      <h2>Everything a sound tech checks before the show, in one app</h2>
+      <h2>Everything else a sound tech checks before the show</h2>
     </div>
     <div class="features">
       <div class="f reveal"><div class="ic"><svg><use href="#i-bolt"/></svg></div><h3>OPT in one click</h3><p>Power plan, CPU minimum state, core parking, USB and PCIe power saving, MMCSS Pro Audio priority and timer resolution, all at once.</p></div>
@@ -320,12 +392,12 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
   <div class="wrap">
     <div class="section-head reveal">
       <div class="kicker">How it works</div>
-      <h2>Scan. OPT. Record.</h2>
+      <h2>Open SuperRack. Scan. OPT.</h2>
     </div>
     <div class="steps">
-      <div class="step reveal"><div class="num">1</div><h3>Scan</h3><p>The app opens with a deep scan and an Audio score from 0 to 100. Each problem is listed with a dot: green is fine, orange can be improved, red needs attention.</p></div>
-      <div class="step reveal"><div class="num">2</div><h3>OPT</h3><p>Pick a profile (Recording, Mixing or Live show) or choose settings yourself, then press OPT. A backup is saved first.</p></div>
-      <div class="step reveal"><div class="num">3</div><h3>Record, then restore</h3><p>Work with LIVE OPT floating on screen. When the session ends, Restore defaults puts your computer back exactly as it was.</p></div>
+      <div class="step reveal"><div class="num">1</div><h3>Open SuperRack, then scan</h3><p>Open SuperRack Performer and your DAW, then AD Audio Optimizer. The deep scan checks SuperRack's priority, your Waves installation and everything else, with an Audio score from 0 to 100.</p></div>
+      <div class="step reveal"><div class="num">2</div><h3>OPT</h3><p>Pick the Live show profile and press OPT. SuperRack goes first, Waves plugins are preloaded, background jobs pause. A backup is saved first.</p></div>
+      <div class="step reveal"><div class="num">3</div><h3>Show, then restore</h3><p>Keep LIVE OPT on screen: it always shows SuperRack's CPU. When you pack up, Restore defaults puts your computer back exactly as it was.</p></div>
     </div>
   </div>
 </section>
@@ -340,7 +412,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
       <ul>
         <li><span class="swatch" style="background:var(--accent)"></span><span><b>Cores ring.</b> One bar per core. A single core at 100% causes dropouts even when total CPU looks low.</span></li>
         <li><span class="swatch" style="background:var(--good)"></span><span><b>Live latency.</b> Real-time wake-up delay with a 60-second history. Spikes show up in red with the busiest app at that moment.</span></li>
-        <li><span class="swatch" style="background:var(--warn)"></span><span><b>App in use.</b> The app in front and how much CPU it takes right now.</span></li>
+        <li><span class="swatch" style="background:var(--gold)"></span><span><b>★ SuperRack always visible.</b> While SuperRack Performer runs, the gauge shows its CPU in gold, whatever app is in front.</span></li>
       </ul>
     </div>
   </div>
@@ -355,6 +427,11 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
     </div>
     <div class="table reveal">
       <div class="row"><div>Feature</div><div>Windows</div><div>Mac</div></div>
+      <div class="row"><div>★ SuperRack Performer top priority</div><div class="y">✓ CPU + I/O, permanent start</div><div class="y">✓ above DAWs</div></div>
+      <div class="row"><div>★ Preload Waves plugins into memory</div><div class="y">✓</div><div class="y">✓</div></div>
+      <div class="row"><div>★ Waves License Engine priority</div><div class="y">✓</div><div class="y">✓</div></div>
+      <div class="row"><div>★ Waves folders excluded from antivirus scan</div><div class="y">✓</div><div class="n">not needed</div></div>
+      <div class="row"><div>DAW priority High</div><div class="y">✓ CPU + I/O</div><div class="y">✓</div></div>
       <div class="row"><div>Deep scan, Audio score, profiles</div><div class="y">✓</div><div class="y">✓</div></div>
       <div class="row"><div>LIVE OPT floating gauge and live monitor</div><div class="y">✓</div><div class="y">✓</div></div>
       <div class="row"><div>Close background apps (DAWs protected)</div><div class="y">✓</div><div class="y">✓</div></div>
@@ -404,6 +481,10 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
   <div class="wrap">
     <div class="section-head reveal"><div class="kicker">FAQ</div><h2>Questions sound techs ask</h2></div>
     <div class="faq">
+      <details><summary>Why doesn't SuperRack get Realtime priority?</summary><p>Realtime priority can starve Windows itself: the mouse, the screen and even the audio driver's helpers. A single runaway plugin could freeze the computer in the middle of a show. High is the highest safe level, and it's what SuperRack Performer gets, together with high disk priority and a permanent High start.</p></details>
+      <details><summary>Does it work with SuperRack SoundGrid?</summary><p>The optimizer focuses on SuperRack Performer, which runs plugins on your computer's CPU. With SuperRack SoundGrid, plugins run on the SoundGrid server, so the host computer matters less. Its Waves and SoundGrid services are still protected and never closed.</p></details>
+      <details><summary>Will preloading Waves fill up my memory?</summary><p>It uses at most half of the free memory, and only file cache that the system gives back the moment an app needs it. It runs after the memory clean, so the clean doesn't throw the plugins out again.</p></details>
+      <details><summary>Is excluding the Waves folders from Defender safe?</summary><p>Only the Waves program folders, the WaveShell plugin files and the Waves Audio data folder are excluded, and only until you press Restore defaults. Real-time protection stays on for everything else. It's optional: uncheck it if your studio policy doesn't allow exclusions.</p></details>
       <details><summary>Is it safe? Can it break my system?</summary><p>Every setting is read and saved to a backup file before it changes, and Restore defaults writes the originals back. Services are paused, not deleted. Security settings like Memory Integrity are reported but never changed by the app. For Deep optimize on Windows we still recommend creating a System Restore point first.</p></details>
       <details><summary>Will it close my DAW or my plugins?</summary><p>No. Cubase, Nuendo, Logic, Ableton Live, Pro Tools, Reaper, FL Studio, Studio One, Bitwig, live-show software and audio interface control panels are detected and protected. Before closing anything, the app shows you the list.</p></details>
       <details><summary>Does “freeing RAM” really help?</summary><p>Only a little, and we don't pretend otherwise. Free memory doesn't make a computer faster. The real gains for audio come from power settings, priorities and stopping background jobs. The app frees only memory that's cached but unused, so sample libraries load faster.</p></details>
@@ -416,8 +497,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
 <section class="final">
   <div class="wrap">
-    <h2 class="reveal">Hit record with confidence.</h2>
-    <p class="lead reveal" style="margin:16px auto 0">Free for Windows and Mac. Made by a live sound engineer for sound and video technicians.</p>
+    <h2 class="reveal">Your rack, first in line.</h2>
+    <p class="lead reveal" style="margin:16px auto 0">Free for Windows and Mac. Made by a live sound engineer for SuperRack Performer users, sound and video technicians.</p>
     <div class="cta reveal">
       <a class="btn btn-p" href="https://github.com/aviadderi1/AudioOptimizer/releases/latest/download/AD-Audio-Optimizer-windows.zip"><svg><use href="#i-win"/></svg>Download for Windows</a>
       <a class="btn btn-s" href="https://github.com/aviadderi1/AudioOptimizer/releases/latest/download/AD-Audio-Optimizer-mac.zip"><svg><use href="#i-apple"/></svg>Download for Mac</a>
@@ -427,7 +508,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 
 <footer>
   <div class="wrap">
-    <span>© <span id="yr"></span> AD SOUND &amp; SERVICE · AD Audio Optimizer</span>
+    <span>© <span id="yr"></span> AD SOUND &amp; SERVICE · AD Audio Optimizer · Not affiliated with or endorsed by Waves Audio Ltd. SuperRack and Waves are trademarks of their owners.</span>
     <span><a href="https://github.com/aviadderi1/AudioOptimizer">Source on GitHub</a></span>
   </div>
 </footer>
@@ -465,7 +546,8 @@ function makeGauge(canvas, opts) {
     txt('µs', 10, '400', lc, 151);
     x.beginPath(); hist.forEach((v, i) => { const px = c + (-52 + i * 104 / 59) * s, py = (182 - Math.min(1, v / 1000) * 20) * s; i ? x.lineTo(px, py) : x.moveTo(px, py); });
     x.strokeStyle = lc; x.globalAlpha = .85; x.lineWidth = 1.3 * s; x.stroke(); x.globalAlpha = 1;
-    txt(opts.app + ' · ' + Math.round(cpu * .6) + '%', 9.5, '400', '#e8eaed', 202);
+    if (opts.superrack) txt('★ SuperRack · ' + Math.round(cpu * .7) + '% · High', 9.5, '600', '#f5c04a', 202);
+    else txt(opts.app + ' · ' + Math.round(cpu * .6) + '%', 9.5, '400', '#e8eaed', 202);
     txt('CPU ' + Math.round(cpu) + '%   RAM ' + Math.round(mem) + '%', 8, '400', '#969eaa', 217);
     if (spike > 0) { txt('Spike 1,240 µs · chrome 18%', 8, '600', '#f05050', 233); spike--; }
   }
@@ -483,8 +565,8 @@ function makeGauge(canvas, opts) {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduce) setInterval(step, 260);
 }
-makeGauge(document.getElementById('heroGauge'), { app: 'Cubase 14', cores: 16, spikes: false });
-makeGauge(document.getElementById('liveGauge'), { app: 'Logic Pro', cores: 12, spikes: true });
+makeGauge(document.getElementById('heroGauge'), { app: 'SuperRack', cores: 16, spikes: false, superrack: true });
+makeGauge(document.getElementById('liveGauge'), { app: 'SuperRack', cores: 12, spikes: true, superrack: true });
 
 // before / after waveforms
 function wave(id, clicks) {
