@@ -1,4 +1,5 @@
 import AppKit
+import CoreAudio
 
 final class MainController: NSObject, NSWindowDelegate {
     let window: NSWindow
